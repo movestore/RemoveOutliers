@@ -1,0 +1,21 @@
+{
+  "settings": [
+    {
+      "id": "maxspeed",
+      "name": "Speed exceeding movement abilities of the animal(s)",
+      "description": "Insert maximum speed (in m/s)",
+      "defaultValue": null,
+      "type": "INTEGER"
+    }
+  ],
+  "dependencies": {
+    "R": [
+      {
+        "name": "move"
+      },
+      {
+        "name": "foreach"
+      }
+	]
+  }
+}
