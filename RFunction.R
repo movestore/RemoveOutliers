@@ -3,6 +3,8 @@ library('foreach')
 
 rFunction <- function(data, maxspeed=NULL)
 {
+  Sys.setenv(tz="GMT") 
+  
   if (is.null(maxspeed)) logger.info("No maximum speed provided, only manually marked Outliers removed.") else logger.info(paste0("Remove manually marked outliers and positions with maximum speed > ", maxspeed,"m/s"))
   
   data.split <- move::split(data)
