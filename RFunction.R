@@ -10,11 +10,11 @@ rFunction <- function(data, maxspeed=NULL)
   data.split <- move::split(data)
   clean <- foreach(datai = data.split) %do% {
     logger.info(namesIndiv(datai))
-    datai <- datai[(is.na(datai@data$manually_marked_outlier) | datai@data$manually_marked_outlier==""),]
+    #datai <- datai[(is.na(datai@data$manually_marked_outlier) | datai@data$manually_marked_outlier==""),] #ask sarah about this feature
     if (!is.null(maxspeed)) datai[speed(datai)<maxspeed,] else datai
   }
   names(clean) <- names(data.split)
-  
+
   clean_nozero <- clean[unlist(lapply(clean, length) > 1)] #remove list elements of length 1 or 0
   moveStack(clean_nozero)
 }
