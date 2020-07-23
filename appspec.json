@@ -6,6 +6,13 @@
       "description": "Insert maximum speed (in m/s)",
       "defaultValue": null,
       "type": "INTEGER"
+    },
+    {
+      "id": "MBremove",
+      "name": "Movebank marked Outliers",
+      "description": "Tick if you want to remove the in Movebank marked outliers",
+      "defaultValue": true,
+      "type": "CHECKBOX"
     }
   ],
   "dependencies": {
