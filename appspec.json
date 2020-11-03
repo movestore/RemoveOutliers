@@ -31,7 +31,7 @@
 	    {
       "id": "minaccuracy",
       "name": "Minimum non-acceptable location error",
-      "description": "Inset the maximum location error that you find acceptable. All higher values will be filtered out.",
+      "description": "Inset the maximum location error (in metres) that you find acceptable. All higher values will be filtered out.",
       "defaultValue": null,
       "type": "DOUBLE"
     }
