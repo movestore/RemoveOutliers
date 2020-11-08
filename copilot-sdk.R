@@ -23,7 +23,6 @@ args[["FUTUREremove"]]=TRUE
 args[["accuracy_var"]]="location_error_numerical"
 args[["minaccuracy"]]=30 #m
 
-
 #################################################################
 #################################################################
 inputData <- NULL
