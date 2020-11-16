@@ -5,11 +5,15 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
 {
   Sys.setenv(tz="GMT") 
   
-  if (accuracy_var %in% names(data)==FALSE)
+  if (!is.null(accuracy_var))
   {
-    logger.info("Your defined accuracy variable name does not exist in the data. Please double check. Here set it to NULL")
+    if (accuracy_var %in% names(data)==FALSE)
+    {
+    logger.info("Your defined accuracy variable name does not exist in the data. Please double check. Here it is set to NULL, leading to no removal of high error locations.")
     accuracy_var <- NULL
+    }
   }
+  print(accuracy_var)
   
   if (is.null(maxspeed) & MBremove==FALSE & FUTUREremove==FALSE & (is.null(accuracy_var) | is.null(minaccuracy))) logger.info("No maximum speed provided, no accuracy variable/minimum accuracy defined and required to leave Movebank marked Outliers and future timestamp locations in. Return input data set.")
   

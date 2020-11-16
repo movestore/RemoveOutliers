@@ -18,9 +18,9 @@ args <- list()
 
 # Add your arguments of your r function here
 args[["maxspeed"]] = 50
-args[["MBremove"]] =TRUE
-args[["FUTUREremove"]]=TRUE
-args[["accuracy_var"]]="location_error_numerical"
+args[["MBremove"]] =FALSE
+args[["FUTUREremove"]]=FALSE
+args[["accuracy_var"]]="location_errorr_numerical"
 args[["minaccuracy"]]=30 #m
 
 #################################################################
