@@ -2,7 +2,7 @@ library(jsonlite)
 source("logger.R")
 source("RFunction.R")
 
-inputFileName = "input_highres_geese_Ontsje.rds" #important to set to NULL for movebank-download
+inputFileName = "CurlewData.rds" #important to set to NULL for movebank-download
 outputFileName = "output.rds"
 
 args <- list()
@@ -18,10 +18,10 @@ args <- list()
 
 # Add your arguments of your r function here
 args[["maxspeed"]] = 50
-args[["MBremove"]] =FALSE
-args[["FUTUREremove"]]=FALSE
-args[["accuracy_var"]]="location_errorr_numerical"
-args[["minaccuracy"]]=30 #m
+args[["MBremove"]] =TRUE
+args[["FUTUREremove"]]=TRUE
+args[["accuracy_var"]]=NULL #"location_errorr_numerical"
+args[["minaccuracy"]]=NULL #30 #m
 
 #################################################################
 #################################################################
