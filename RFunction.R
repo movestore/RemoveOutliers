@@ -1,5 +1,4 @@
 library('move')
-library('foreach')
 
 rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, accuracy_var=NULL, minaccuracy=NULL)
 {
@@ -23,7 +22,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
   if (!is.null(accuracy_var) & !is.null(minaccuracy)) logger.info(paste("Remove positions with high location error:",accuracy_var,">",minaccuracy)) else logger.info("Data will not be filtered for location error.")
 
   data.split <- move::split(data)
-  clean <- foreach(datai = data.split) %do% {
+  clean <- lapply(data.split, function(datai) {
     logger.info(namesIndiv(datai))
     if (MBremove==TRUE) 
     {
@@ -44,13 +43,13 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
       if (length(ixS)>0) datai <- datai[-ixS,]
     }
     datai
-  }
+  })
   names(clean) <- names(data.split) #clean is still list of move objects
 
   if (FUTUREremove==TRUE)
   {
     time_now <- Sys.time()
-    clean_nofuture <- foreach(cleani = clean) %do% {
+    clean_nofuture <- lapply(clean, function(cleani) {
       logger.info(namesIndiv(cleani))
       if (any(timestamps(cleani)>time_now)) 
       {
@@ -62,7 +61,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
         logger.info("There are no locations with timestamps in the future.")
         cleani
       }
-    }
+    })
   } else clean_nofuture <- clean
 
   
