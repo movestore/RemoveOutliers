@@ -2,7 +2,7 @@ library('move')
 
 rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, accuracy_var=NULL, minaccuracy=NULL)
 {
-  Sys.setenv(tz="GMT") 
+  Sys.setenv(tz="UTC") 
   
   if (!is.null(accuracy_var))
   {
