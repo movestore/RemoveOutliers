@@ -10,28 +10,28 @@
     {
       "id": "MBremove",
       "name": "Movebank marked Outliers",
-      "description": "Tick if you want to remove the in Movebank marked outliers",
+      "description": "Tick if you want to remove locations that have been flagged as outliers in Movebank.",
       "defaultValue": true,
       "type": "CHECKBOX"
     },
 	    {
       "id": "FUTUREremove",
       "name": "Future timestamp Outliers",
-      "description": "Tich if you want to remove locations with future timestamp",
+      "description": "Tick if you want to remove locations with future timestamps.",
       "defaultValue": true,
       "type": "CHECKBOX"
     },
 	    {
       "id": "accuracy_var",
       "name": "Name of variable indicating location error",
-      "description": "Provide the exact name of the variable indication location error in your data set",
+      "description": "Provide the exact name of the variable indicating location error in your data set. If unsure, please run the first App in your workflow and check the Variable Names in the Output Details overview.",
       "defaultValue": null,
       "type": "STRING"
     },
 	    {
       "id": "minaccuracy",
-      "name": "Minimum non-acceptable location error",
-      "description": "Inset the maximum location error (in metres) that you find acceptable. All higher values will be filtered out.",
+      "name": "Maximum acceptable location error",
+      "description": "Insert the maximum location error (in meters) that you find acceptable. All higher values will be filtered out.",
       "defaultValue": null,
       "type": "DOUBLE"
     }
