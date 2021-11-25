@@ -1,8 +1,15 @@
 library('move')
+library('geosphere')
 
 rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, accuracy_var=NULL, minaccuracy=NULL)
 {
   Sys.setenv(tz="UTC") 
+  
+  speedx <- function(x) #input move object
+  {
+    N <- length(x)
+    distVincentyEllipsoid(coordinates(x))/as.numeric(difftime(timestamps(x)[-1],timestamps(x)[-N],units="secs"))
+  }
   
   if (!is.null(accuracy_var))
   {
@@ -38,7 +45,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     }
     if (!is.null(maxspeed)) 
     {
-      ixS <- which(speed(datai)>maxspeed)  
+      ixS <- which(speedx(datai)>maxspeed)  
       logger.info(paste("For this animal",length(ixS),"positions are removed due to between location speeds >",maxspeed,"m/s"))
       if (length(ixS)>0) datai <- datai[-ixS,]
     }
