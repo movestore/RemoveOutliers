@@ -10,7 +10,7 @@
     {
       "id": "MBremove",
       "name": "Movebank marked Outliers",
-      "description": "Tick if you want to remove locations that have been flagged as outliers in Movebank.",
+      "description": "Tick if you want to remove locations that have been flagged as outliers in Movebank. (Note that they could already have been filtered out during upload with the Movebank App.)",
       "defaultValue": true,
       "type": "CHECKBOX"
     },
@@ -24,14 +24,14 @@
 	    {
       "id": "accuracy_var",
       "name": "Name of variable indicating location error",
-      "description": "Provide the exact name of the variable indicating location error in your data set. If unsure, please run the first App in your workflow and check the Variable Names in the Output Details overview.",
+      "description": "Provide the exact name of a variable indicating location error in your data set. All values must be numeric and use consistent units. If unsure, please run the first App in your workflow and check the variable names in the Output Details overview. In Movebank, location error is typically stored as `location error numerical` (in m).",
       "defaultValue": null,
       "type": "STRING"
     },
 	    {
       "id": "minaccuracy",
       "name": "Maximum acceptable location error",
-      "description": "Insert the maximum location error (in meters) that you find acceptable. All higher values will be filtered out.",
+      "description": "Insert the maximum location error (in the same unit as the location error values) that you find acceptable. All higher values will be filtered out.",
       "defaultValue": null,
       "type": "DOUBLE"
     }
