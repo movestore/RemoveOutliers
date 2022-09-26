@@ -45,7 +45,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     }
     if (!is.null(maxspeed)) 
     {
-      ixS <- which(speedx(datai)>maxspeed)  
+      if (length(datai)>1) ixS <- which(speedx(datai)>maxspeed) else ixS <- numeric()  #fix for tracks with 1 locations
       logger.info(paste("For this animal",length(ixS),"positions are removed due to between location speeds >",maxspeed,"m/s"))
       if (length(ixS)>0) datai <- datai[-ixS,]
     }
