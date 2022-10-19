@@ -28,6 +28,14 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
   if (FUTUREremove==TRUE) logger.info("Locations with future timestamps will be removed.") else logger.info("Locations with future timestamps will be retained.")
   if (!is.null(accuracy_var) & !is.null(minaccuracy)) logger.info(paste("Remove positions with high location error:",accuracy_var,">",minaccuracy)) else logger.info("Data will not be filtered for location error.")
 
+  #take out unrealistic coordinates
+  ixNN <- which (coordinates(data)[,1]<(-180) | coordinates(data)[,1]>180 | coordinates(data)[,2]<(-90) | coordinates(data)[,2]>90)
+  if (length(ixNN)>0)
+  {
+    logger.info(paste(length(ixNN),"locations have longitude/latitude outside of the usual ranges [-180,180],[-90,90]. Those locations are removed from the data set"))
+    data <- data[-ixNN] #if one complete animal is taken out, no problem with moveStack structure :)
+  }
+  
   data.split <- move::split(data)
   clean <- lapply(data.split, function(datai) {
     logger.info(namesIndiv(datai))
