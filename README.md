@@ -18,26 +18,26 @@ moveStack in Movebank format
 ### Artefacts
 none
 
-### Parameters 
-`maxspeed`: Maximum ground speed that the animals are capable of moving. Unit: m/s Example: 50.
+### Settings
+**Speed exceeding movement abilities of the animal(s) (`maxspeed`):** Maximum ground speed that the animals are capable of moving. Unit: m/s Example: 50.
 
-`MBremove`: Indication if Movebank defined outliers shall be removed. Checkbox (Yes/No)
+**Movebank marked Outliers (`MBremove`):** Indication if Movebank defined outliers shall be removed. Checkbox (Yes/No)
 
-`FUTUREremove`: Indication if future timestamps shall be removed. Checkbox (Yes/No)
+**Future timestamp Outliers (`FUTUREremove`):** Indication if future timestamps shall be removed. Checkbox (Yes/No)
 
-`accuracy_var`: Name of the data attribute that indicates location errors. Please be very accurate in spelling. Example. "location_error_numerical".
+**Name of variable indicating location error (`accuracy_var`):** Name of the data attribute that indicates location errors. Please be very accurate in spelling. Example. "location_error_numerical".
 
-`minaccuracy`: Minimum accuracy that is required for useful data. Exceeding this value leads to location removal. This related tot he user-defined `accuracy_var`. Example: 30
+**Maximum acceptable location error (`minaccuracy`):** Minimum accuracy that is required for useful data. Exceeding this value leads to location removal. This related tot he user-defined `accuracy_var`. Example: 30
 
 ### Null or error handling:
-**Parameter `maxspeed`:** If no maximum speed is given (NULL), then the locations are not filtered for this property. 
+**Setting `maxspeed`:** If no maximum speed is given (NULL), then the locations are not filtered for this property. 
 
-**Parameter `MBremove`:** This value can only be Yes or No, so no error or null possible.
+**Setting `MBremove`:** This value can only be Yes or No, so no error or null possible.
 
-**Parameter `FUTUREremove`:** This value can only be Yes or No, so no error or null possible.
+**Setting `FUTUREremove`:** This value can only be Yes or No, so no error or null possible.
 
-**Parameter `accuracy_var`:** If this variable name is not given or does not fit with any of the data attributes, the data will not be filtered for accuracy.
+**Setting `accuracy_var`:** If this variable name is not given or does not fit with any of the data attributes, the data will not be filtered for accuracy.
 
-**Parameter `minaccuracy`:** If this value is not given (NULL), the data will not be filtered for accuracy.
+**Setting `minaccuracy`:** If this value is not given (NULL), the data will not be filtered for accuracy.
 
 **Data:** If no data are retained after all outlier removal, NULL is returned, likely leading to an error.
