@@ -7,13 +7,13 @@ Github repository: *github.com/movestore/RemoveOutliers*
 Different types of outliers can be removed from a Movement data set: any locations that exceed a user-given speed, that have been marked as outliers in Movebank, that have an unrealistic, future timestamp or that exceed a user-specified error attribute.
 
 ## Documentation
-This App is designed to delete outliers from your data set before any analysis. First, it deletes any locations with longitude/latitude outside of the defined ranges -180 to 180 (longitude) and -90 to 90 (latitude). Then, it filters out the Movebank defined outliers, which are indicated by the variable `visible` being `FALSE`. Furthermore, it allows removing locations to which a user-given speed is exceeded. Also tag specific accuracy variable can be defined and taken out if exceeding a ceratin value. Finally, locations with timestamps that lie in the future can be removed.
+This App is designed to delete outliers from your data set before any analysis. First, it deletes any locations with longitude/latitude outside of the defined ranges -180 to 180 (longitude) and -90 to 90 (latitude). Then, it filters out the Movebank defined outliers, which are indicated by the variable `visible` being `FALSE`. Furthermore, it allows removing locations to which a user-given speed is exceeded. Please note that here, not a provided ground speed of locations is used, but the between-location interpolated speed. (If you require the former, please use the Segment Data by Speed or Filter Unrealistic Values App.) Also a tag specific accuracy variable can be defined and taken out if exceeding a ceratin value. Finally, locations with timestamps that lie in the future can be removed.
 
 ### Input data
-moveStack in Movebank format
+move2 location object
 
 ### Output data
-moveStack in Movebank format
+move2 location object
 
 ### Artefacts
 none

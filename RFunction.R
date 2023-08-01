@@ -1,15 +1,10 @@
-library('move')
-library('geosphere')
+library('move2')
+library('units')
+library('sf')
 
 rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, accuracy_var=NULL, minaccuracy=NULL)
 {
   Sys.setenv(tz="UTC") 
-  
-  speedx <- function(x) #input move object
-  {
-    N <- length(x)
-    distVincentyEllipsoid(coordinates(x))/as.numeric(difftime(timestamps(x)[-1],timestamps(x)[-N],units="secs"))
-  }
   
   if (!is.null(accuracy_var))
   {
@@ -19,8 +14,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     accuracy_var <- NULL
     }
   }
-  #print(accuracy_var)
-  
+
   if (is.null(maxspeed) & MBremove==FALSE & FUTUREremove==FALSE & (is.null(accuracy_var) | is.null(minaccuracy))) logger.info("No maximum speed provided, no accuracy variable/minimum accuracy defined and required to leave Movebank marked Outliers and future timestamp locations in. Return input data set.")
   
   if (!is.null(maxspeed)) logger.info(paste0("Remove positions with maximum speed > ", maxspeed,"m/s")) else logger.info ("No maximum speed provided, so no filtering by it.")
@@ -29,16 +23,16 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
   if (!is.null(accuracy_var) & !is.null(minaccuracy)) logger.info(paste("Remove positions with high location error:",accuracy_var,">",minaccuracy)) else logger.info("Data will not be filtered for location error.")
 
   #take out unrealistic coordinates
-  ixNN <- which (coordinates(data)[,1]<(-180) | coordinates(data)[,1]>180 | coordinates(data)[,2]<(-90) | coordinates(data)[,2]>90)
+  ixNN <- which (st_coordinates(data)[,1]<(-180) | st_coordinates(data)[,1]>180 | st_coordinates(data)[,2]<(-90) | st_coordinates(data)[,2]>90)
   if (length(ixNN)>0)
   {
     logger.info(paste(length(ixNN),"locations have longitude/latitude outside of the usual ranges [-180,180],[-90,90]. Those locations are removed from the data set"))
     data <- data[-ixNN] #if one complete animal is taken out, no problem with moveStack structure :)
   }
   
-  data.split <- move::split(data)
+  data.split <- split(data,mt_track_id(data))
   clean <- lapply(data.split, function(datai) {
-    logger.info(namesIndiv(datai))
+    logger.info(unique(mt_track_id(datai)))
     if (MBremove==TRUE) 
     {
       ix <- which(as.logical(datai$visible)==FALSE) #all marked outliers go together in "visible"
@@ -47,29 +41,30 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     }
     if (!is.null(accuracy_var) & !is.null(minaccuracy)) 
     {
-      ixA <- which(datai@data[,accuracy_var]>=as.numeric(minaccuracy))
+      ixA <- which(as.numeric(as.data.frame(datai)[,accuracy_var])>=as.numeric(minaccuracy))
       logger.info(paste("For this animal",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
       if (length(ixA)>0) datai <- datai[-ixA,] 
     }
-    if (!is.null(maxspeed)) 
+    if (!is.null(maxspeed) & nrow(datai)>0) 
     {
-      if (length(datai)>1) ixS <- which(speedx(datai)>maxspeed) else ixS <- numeric()  #fix for tracks with 1 locations
+      if (length(datai)>1) ixS <- which(units::set_units(mt_speed(datai),m/s)>units::set_units(maxspeed,m/s)) else ixS <- numeric()  #fix for tracks with 1 locations
       logger.info(paste("For this animal",length(ixS),"positions are removed due to between location speeds >",maxspeed,"m/s"))
       if (length(ixS)>0) datai <- datai[-ixS,]
     }
     datai
   })
   names(clean) <- names(data.split) #clean is still list of move objects
+  if (length(clean)>1) clean_move2 <- mt_stack(clean,.track_combine = "rename") else clean_move2 <- clean[[1]]
 
-  if (FUTUREremove==TRUE)
+  if (FUTUREremove==TRUE & nrow(clean_move2)>0)
   {
     time_now <- Sys.time()
     clean_nofuture <- lapply(clean, function(cleani) {
-      logger.info(namesIndiv(cleani))
-      if (any(timestamps(cleani)>time_now)) 
+      logger.info(unique(mt_track_id(cleani)))
+      if (any(mt_time(cleani)>time_now)) 
       {
-        ix_future <- which(timestamps(cleani)>time_now)
-        logger.info(paste("Warning! Data of the animal",namesIndiv(cleani),"contain",length(ix_future),"timestamps in the future. They are removed here."))
+        ix_future <- which(mt_time(cleani)>time_now)
+        logger.info(paste("Warning! Data of the animal",unique(mt_track_id(cleani)),"contain",length(ix_future),"timestamps in the future. They are removed here."))
         cleani[-ix_future] 
       } else 
       {
@@ -79,14 +74,16 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     })
   } else clean_nofuture <- clean
 
+  if (length(clean_nofuture)>1) result <- mt_stack(clean_nofuture,.track_combine="rename") else result <- clean_nofuture[[1]]
   
-  clean_nozero <- clean_nofuture[unlist(lapply(clean_nofuture, length) > 0)] #remove list elements of length 0
-  if (length(clean_nozero)==0) 
+  if (nrow(result)==0)
   {
     logger.info("Your output file contains no positions. Return NULL.")
     result <- NULL
-  } else result <- moveStack(clean_nozero)
+  }
 
+  print(nrow(result))
+  
   result
 }
   
