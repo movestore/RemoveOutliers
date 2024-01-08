@@ -8,10 +8,10 @@ Remove location records from a tracking data set that should be considered "outl
 
 ## Documentation
 This App is designed to remove outliers from your data set prior to subsequent analysis steps. First, it removes any locations with longitude/latitude outside of the defined ranges -180 to 180 (longitude) and -90 to 90 (latitude). Then, based on user-provided settings, it can optionally remove
-* locations that exceed a speed threshold
+* locations that exceed a speed threshold (approximated between-location speed)
 * locations defined as outliers in Movebank, which are indicated by the variable [visible](http://vocab.nerc.ac.uk/collection/MVB/current/MVB000209/) being `FALSE` (see note below). 
 * locations for which the timestamp is in the future (these can be inaccurate values recorded by tags; otherwise, also check whether these may indicate a problem in your data)
-* locations in which values in an attribute that contains a location accuracy estimate exceed a ceratin value.
+* locations in which values in an attribute that contains a location accuracy estimate exceed a ceratin value.* Note that it will lead to an error, if the selected attribute contains values that are not numeric. If that is the case for your data, dont use this feature.
 
 **Note:** If these data are from a study in Movebank for which you are a data manager, and if you want to flag records that you consider to be outliers across most/all use cases, we recommend [flagging outliers directly in the study](https://www.movebank.org/cms/movebank-content/upload-qc#flag_outliers) where possible. By storing results in your study, you will avoid needing to replicate these filter steps across workflows or other software, and can indicate those records you consider to be outliers to anyone with whom you share your data.
 

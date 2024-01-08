@@ -45,11 +45,15 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
       logger.info(paste("For this animal",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
       if (length(ixA)>0) datai <- datai[-ixA,] 
     }
-    if (!is.null(maxspeed) & nrow(datai)>0) 
+    if (!is.null(maxspeed) & nrow(datai)>0) #here changed to while loop (Jan2024)
     {
-      if (length(datai)>1) ixS <- which(units::set_units(mt_speed(datai),m/s)>units::set_units(maxspeed,m/s)) else ixS <- numeric()  #fix for tracks with 1 locations
-      logger.info(paste("For this animal",length(ixS),"positions are removed due to between location speeds >",maxspeed,"m/s"))
-      if (length(ixS)>0) datai <- datai[-ixS,]
+      len0 <- nrow(datai)
+      while (any(units::set_units(mt_speed(datai),m/s)[-nrow(datai)]>units::set_units(maxspeed,m/s)))
+      {
+        if (length(datai)>1) ixS <- which(units::set_units(mt_speed(datai),m/s)>units::set_units(maxspeed,m/s)) else ixS <- numeric()  #fix for tracks with 1 locations
+        if (length(ixS)>0) datai <- datai[-ixS,]
+      }
+      logger.info(paste("For this animal",len0-nrow(datai),"positions are removed due to between location speeds >",maxspeed,"m/s"))
     }
     datai
   })
