@@ -1,0 +1,7 @@
+{
+    "maxspeed": 20,
+    "MBremove": true,
+    "FUTUREremove": true,
+    "accuracy_var": "eobs_horizontal_accuracy_estimate",
+    "minaccuracy": 30
+}

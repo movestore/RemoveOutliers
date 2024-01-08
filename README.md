@@ -16,10 +16,10 @@ This App is designed to remove outliers from your data set prior to subsequent a
 **Note:** If these data are from a study in Movebank for which you are a data manager, and if you want to flag records that you consider to be outliers across most/all use cases, we recommend [flagging outliers directly in the study](https://www.movebank.org/cms/movebank-content/upload-qc#flag_outliers) where possible. By storing results in your study, you will avoid needing to replicate these filter steps across workflows or other software, and can indicate those records you consider to be outliers to anyone with whom you share your data.
 
 ### Input data
-moveStack in Movebank format
+move2 location object
 
 ### Output data
-moveStack in Movebank format
+move2 location object
 
 ### Artefacts
 none
