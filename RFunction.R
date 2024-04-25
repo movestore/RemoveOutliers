@@ -42,12 +42,13 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
     if (!is.null(accuracy_var) & !is.null(minaccuracy)) 
     {
       ixA <- which(as.numeric(as.data.frame(datai)[,accuracy_var])>=as.numeric(minaccuracy))
-      logger.info(paste("For this animal",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
+      logger.info(paste("For this animal",attr(datai, "track_data")$individual_id,",",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
       if (length(ixA)>0) datai <- datai[-ixA,] 
     }
     if (!is.null(maxspeed) & nrow(datai)>0) #here changed to while loop (Jan2024)
     {
       len0 <- nrow(datai)
+      datai<-datai %>% dplyr::filter(!st_is_empty(datai)) ## remove empty geometries because they cause an error
       while (any(units::set_units(mt_speed(datai),m/s)[-nrow(datai)]>units::set_units(maxspeed,m/s)))
       {
         if (length(datai)>1) ixS <- which(units::set_units(mt_speed(datai),m/s)>units::set_units(maxspeed,m/s)) else ixS <- numeric()  #fix for tracks with 1 locations
