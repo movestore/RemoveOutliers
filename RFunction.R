@@ -28,7 +28,7 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
   if (length(ixNN)>0)
   {
     logger.info(paste(length(ixNN),"locations have longitude/latitude outside of the usual ranges [-180,180],[-90,90]. Those locations are removed from the data set"))
-    data <- data[-ixNN] #if one complete animal is taken out, no problem with moveStack structure :)
+    data <- data[-ixNN,] #if one complete animal is taken out, no problem with moveStack structure :)
   }
   
   data.split <- split(data,mt_track_id(data))
