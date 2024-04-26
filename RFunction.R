@@ -1,6 +1,7 @@
 library('move2')
 library('units')
 library('sf')
+library('dplyr')
 
 rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, accuracy_var=NULL, minaccuracy=NULL)
 {
@@ -32,29 +33,37 @@ rFunction <- function(data, maxspeed=NULL, MBremove=TRUE, FUTUREremove=TRUE, acc
   
   data.split <- split(data,mt_track_id(data))
   clean <- lapply(data.split, function(datai) {
-    logger.info(unique(mt_track_id(datai)))
+    #logger.info(unique(mt_track_id(datai)))
+    datai<-datai %>% dplyr::filter(!st_is_empty(datai)) ## remove empty geometries because they cause an error
     if (MBremove==TRUE) 
     {
       ix <- which(as.logical(datai$visible)==FALSE) #all marked outliers go together in "visible"
-      logger.info(paste("For this animal",length(ix),"in Movebank marked outliers were removed."))
-      if (length(ix)>0) datai <- datai[-ix,]
+      if (length(ix)>0)
+      {
+        logger.info(paste("For track",unique(mt_track_id(datai)), ":",length(ix),"in Movebank marked outliers were removed."))
+        datai <- datai[-ix,]
+      }
     }
     if (!is.null(accuracy_var) & !is.null(minaccuracy)) 
     {
       ixA <- which(as.numeric(as.data.frame(datai)[,accuracy_var])>=as.numeric(minaccuracy))
-      logger.info(paste("For this animal",attr(datai, "track_data")$individual_id,",",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
-      if (length(ixA)>0) datai <- datai[-ixA,] 
+      if (length(ixA)>0)
+      {
+        logger.info(paste("For track",unique(mt_track_id(datai)), ":",length(ixA),"positions with high errors are removed:",accuracy_var,">",minaccuracy))
+        datai <- datai[-ixA,]
+      }
     }
     if (!is.null(maxspeed) & nrow(datai)>0) #here changed to while loop (Jan2024)
     {
       len0 <- nrow(datai)
-      datai<-datai %>% dplyr::filter(!st_is_empty(datai)) ## remove empty geometries because they cause an error
+      ixS <- 0
       while (any(units::set_units(mt_speed(datai),m/s)[-nrow(datai)]>units::set_units(maxspeed,m/s)))
       {
         if (length(datai)>1) ixS <- which(units::set_units(mt_speed(datai),m/s)>units::set_units(maxspeed,m/s)) else ixS <- numeric()  #fix for tracks with 1 locations
         if (length(ixS)>0) datai <- datai[-ixS,]
       }
-      logger.info(paste("For this animal",len0-nrow(datai),"positions are removed due to between location speeds >",maxspeed,"m/s"))
+      delN <- len0 - nrow(datai)
+      if (delN>0) logger.info(paste("For track",unique(mt_track_id(datai)), ":",delN,"positions are removed due to between location speeds >",maxspeed,"m/s"))
     }
     datai
   })

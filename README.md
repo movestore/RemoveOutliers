@@ -7,7 +7,7 @@ Github repository: *github.com/movestore/RemoveOutliers*
 Remove location records from a tracking data set that should be considered "outliers" in the context of the workflow. These include locations that fall outside the range W180-E180 and S90-N90, and can be further defined as locations that exceed a user-defined speed, that have been marked as outliers in Movebank, that have a timestamp in the future, or that exceed a user-specified location error threshold.
 
 ## Documentation
-This App is designed to remove outliers from your data set prior to subsequent analysis steps. First, it removes any locations with longitude/latitude outside of the defined ranges -180 to 180 (longitude) and -90 to 90 (latitude). Then, based on user-provided settings, it can optionally remove
+This App is designed to remove outliers from your data set prior to subsequent analysis steps. First, it removes any empty location (thanks Steffen Oppel!) and locations with longitude/latitude outside of the defined ranges -180 to 180 (longitude) and -90 to 90 (latitude). Then, based on user-provided settings, it can optionally remove
 * locations that exceed a speed threshold (approximated between-location speed)
 * locations defined as outliers in Movebank, which are indicated by the variable [visible](http://vocab.nerc.ac.uk/collection/MVB/current/MVB000209/) being `FALSE` (see note below). 
 * locations for which the timestamp is in the future (these can be inaccurate values recorded by tags; otherwise, also check whether these may indicate a problem in your data)
